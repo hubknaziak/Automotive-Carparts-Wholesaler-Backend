@@ -34,4 +34,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     @Modifying
     @Query(value = "DELETE FROM payments WHERE Id_Payment = :Id_Payment ", nativeQuery = true)
     void deleteById(@Param("Id_Payment")int Id_Payment);
+
+    List<Payment> findAllByStatus(String status);
 }

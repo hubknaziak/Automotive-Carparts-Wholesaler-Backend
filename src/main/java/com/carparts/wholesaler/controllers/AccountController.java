@@ -4,6 +4,7 @@ import com.carparts.wholesaler.dtos.AccountDto;
 import com.carparts.wholesaler.models.Account;
 import com.carparts.wholesaler.services.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,9 +15,7 @@ public class AccountController {
 
     @CrossOrigin
     @PostMapping(value = "/addAccount")
-    public Account addAccount(@RequestBody AccountDto accountDto){
-        return accountService.addAccount(accountDto);
-    }
+    public Account addAccount(@RequestBody AccountDto accountDto){ return accountService.addAccount(accountDto); }
 
     @CrossOrigin
     @GetMapping("getAccountByEmail")

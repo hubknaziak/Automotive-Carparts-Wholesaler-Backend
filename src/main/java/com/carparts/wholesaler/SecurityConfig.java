@@ -23,8 +23,6 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // final DataSource dataSource;
-    //private final PasswordEncoder passwordEncoder;
     private final ObjectMapper objectMapper;
     private final RestAuthenticationSuccessHandler successHandler;
     private final RestAuthenticationFailureHandler failureHandler;
@@ -39,26 +37,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable(); //disable csrf token handling
+        http.csrf().disable();
         http.cors();
         http
                 .authorizeRequests()
                 .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**")
                     .permitAll()
-                //.antMatchers("/getAllCarMakes").authenticated()
+                .antMatchers("/getClientByEmail", "addNewPart", "addSpecimenPart", "deleteSpecimenPart", "updateSpecimenPart", "getAllPayments", "confirmOrder", "deletePayment",
+                        "addDiscountCode", "deleteDiscountCode").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/get**").permitAll()
                 .antMatchers("/addClient", "/addPersonalData", "/addAccount").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("getPaymentByIdClient", "deleteDetailPayment", "updateAccount", "updatePersonalData", "disableAccount").authenticated()
                 .and()
                 .addFilter(authenticationFilter())
-                //.formLogin().permitAll() //wchodzimy bez logowania na formularz
-                //.and()
                 .logout().logoutSuccessHandler((request, response, authentication) -> {
                     response.setStatus(HttpServletResponse.SC_OK);
                 })
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)); //po wejsciu na zabezpieczony endpint wywala 401
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
     }
     public JsonObjectAuthenticationFilter authenticationFilter() throws Exception{
         JsonObjectAuthenticationFilter authenticationFilter = new JsonObjectAuthenticationFilter(objectMapper);

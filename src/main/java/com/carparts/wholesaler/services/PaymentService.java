@@ -21,12 +21,18 @@ public class PaymentService {
     private final DetailPaymentRepository detailPaymentRepository;
 
     public Payment getPaymentByIdClient(int idClient){
-
-        return paymentRepository.findByClientId(idClient);
+        List<Payment> payments = paymentRepository.findAllByClientId(idClient);
+        Payment payment = new Payment();
+        for (Payment p : payments) {
+            if(p.getStatus().equals("waiting to confirm")){
+                payment = p;
+            }
+        }
+        return payment;
     }
 
     public List<Payment> getAllPayments(){
-        return paymentRepository.findAll();
+        return paymentRepository.findAllByStatus("in progress");
     }
 
     public Payment putDiscountCode(String code, int idPayment){

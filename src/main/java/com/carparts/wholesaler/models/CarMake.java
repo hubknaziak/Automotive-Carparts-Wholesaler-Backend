@@ -19,7 +19,6 @@ import java.util.Set;
 public class CarMake implements Serializable {
 
     public CarMake(){
-
     }
 
     @Id
@@ -35,6 +34,5 @@ public class CarMake implements Serializable {
 
     @OneToMany(mappedBy = "carMake", cascade = CascadeType.ALL)
     @JsonManagedReference
-    //@JoinColumn(name = "Make_id")
     private List<CarModel> carModels;
 }
